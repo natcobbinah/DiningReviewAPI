@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,7 +44,7 @@ public class Restaurant {
 	@Column(name = "over_all_restaurant_score")
 	private Integer overAllRestaurantScore;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)
 	private List<DiningReview> diningReview;
 
 }

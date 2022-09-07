@@ -98,6 +98,8 @@ class DiningReviewApiApplicationTests {
 	//on Restaurants
 	@Test
 	public void createRestaurant() {
+		//submit new restaurant entry as user
+		//if restaurant with sameName and zipCode exists throw error
 		
 		RestaurantAddress restaurantAddress = new RestaurantAddress();
 		restaurantAddress.setName("Mercure");
@@ -117,6 +119,39 @@ class DiningReviewApiApplicationTests {
 		}else {
 			restaurantRepository.save(restaurant);
 			System.out.println("Restaurant entry created successfully");
+		}
+	}
+	
+	@Test
+	public void fetchRestaurantDetailsById() {
+		//fetch details of a restaurant given its uniqueId
+		
+		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(1L);
+		
+		if(!fetchRestaurantById.isPresent()) {
+			System.out.println("Restaurant with the givenId does not exist");
+		}else {
+			Restaurant restaurant = fetchRestaurantById.get();
+			System.out.println(restaurant);
+		}
+	}
+	
+	@Test
+	public void fetchRestaurantsByZipCodeWithReviews() {
+		//fetch restaurants by ZipCode with at least one user submitted Review
+		Optional<Restaurant> fetchRestaurantsByZipCode = restaurantRepository.findByRestaurantAddressZipCode("78180");
+		
+		if(!fetchRestaurantsByZipCode.isPresent()) {
+			System.out.println("No restaurants exists in the given zipCode search");
+		}else {
+			Restaurant restaurant = fetchRestaurantsByZipCode.get();
+			
+			//now verify if restaurant has any reviews
+			if(restaurant.getDiningReview().size() > 0) {
+				System.out.println(restaurant);
+			}else {
+				System.out.println("Restaurants exists in the given ZipCode but no reviews are available");
+			}
 		}
 	}
 
