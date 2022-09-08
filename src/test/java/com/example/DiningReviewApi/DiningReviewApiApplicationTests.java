@@ -1,5 +1,6 @@
 package com.example.DiningReviewApi;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -22,17 +23,17 @@ class DiningReviewApiApplicationTests {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	DiningReviewRepository diningReviewRepository;
-	
+
 	@Autowired
 	RestaurantRepository restaurantRepository;
-	
-	//on Users
+
+	// on Users
 	@Test
 	public void createUser() {
-		//As an unregistered user create my userProfile with  a unique user displayName
+		// As an unregistered user create my userProfile with a unique user displayName
 
 		UserAddress userAddress = new UserAddress();
 		userAddress.setCity("Montigny-Le-Bretonneux");
@@ -58,100 +59,184 @@ class DiningReviewApiApplicationTests {
 		}
 
 	}
-	
+
 	@Test
 	public void updateUserProfile() {
-		//As a registered User can update my profile but not displayName
+		// As a registered User can update my profile but not displayName
 		Optional<User> fetchUserRecordsToUpdate = userRepository.findByDisplayName("Kamikaze");
-		
-		if(fetchUserRecordsToUpdate.isPresent()) {
+
+		if (fetchUserRecordsToUpdate.isPresent()) {
 			User userRecordsToUpdate = fetchUserRecordsToUpdate.get();
-			
+
 			UserAddress userAddress = new UserAddress();
 			userAddress.setCity("Coubervoire");
 			userAddress.setZipCode("75150");
-			
+
 			userRecordsToUpdate.setInterestPeanutAllergies(true);
 			userRecordsToUpdate.setInterestEggAllergies(false);
 			userRecordsToUpdate.setInterestDiaryAllergies(true);
 			userRecordsToUpdate.setUserAddress(userAddress);
-			
+
 			userRepository.save(userRecordsToUpdate);
 			System.out.println(userRecordsToUpdate);
-		}else {
+		} else {
 			System.out.println("User record does not exist");
 		}
 	}
-	
+
 	@Test
 	public void findUserByDisplayName() {
 		Optional<User> retrieveUserProfile = userRepository.findByDisplayName("Kamikaze");
-		
-		if(retrieveUserProfile.isPresent()) {
+
+		if (retrieveUserProfile.isPresent()) {
 			User userInfo = retrieveUserProfile.get();
 			System.out.println(userInfo);
-		}else {
+		} else {
 			System.out.println("No User Record Found");
 		}
 	}
-	
-	//on Restaurants
+
+	// on Restaurants
 	@Test
 	public void createRestaurant() {
-		//submit new restaurant entry as user
-		//if restaurant with sameName and zipCode exists throw error
-		
+		// submit new restaurant entry as user
+		// if restaurant with sameName and zipCode exists throw error
+
 		RestaurantAddress restaurantAddress = new RestaurantAddress();
 		restaurantAddress.setName("Mercure");
 		restaurantAddress.setZipCode("78180");
-		
+
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantAddress(restaurantAddress);
 		restaurant.setPeanutAllergyScore(0);
 		restaurant.setEggAllergyScore(0);
 		restaurant.setDairyAllergyScore(0);
 		restaurant.setOverAllRestaurantScore(0);
-		
-		Optional<Restaurant> retrieveRestaurantIfAlreadyExists = restaurantRepository.findByRestaurantAddress(restaurantAddress);
-		
-		if(retrieveRestaurantIfAlreadyExists.isPresent()) {
+
+		Optional<Restaurant> retrieveRestaurantIfAlreadyExists = restaurantRepository
+				.findByRestaurantAddress(restaurantAddress);
+
+		if (retrieveRestaurantIfAlreadyExists.isPresent()) {
 			System.out.println("The given restaurant already exists. Cannot created restaurant Entry");
-		}else {
+		} else {
 			restaurantRepository.save(restaurant);
 			System.out.println("Restaurant entry created successfully");
 		}
 	}
-	
+
 	@Test
 	public void fetchRestaurantDetailsById() {
-		//fetch details of a restaurant given its uniqueId
-		
+		// fetch details of a restaurant given its uniqueId
+
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(1L);
-		
-		if(!fetchRestaurantById.isPresent()) {
+
+		if (!fetchRestaurantById.isPresent()) {
 			System.out.println("Restaurant with the givenId does not exist");
-		}else {
+		} else {
 			Restaurant restaurant = fetchRestaurantById.get();
 			System.out.println(restaurant);
 		}
 	}
-	
+
 	@Test
 	public void fetchRestaurantsByZipCodeWithReviews() {
-		//fetch restaurants by ZipCode with at least one user submitted Review
-		Optional<Restaurant> fetchRestaurantsByZipCode = restaurantRepository.findByRestaurantAddressZipCode("78180");
-		
-		if(!fetchRestaurantsByZipCode.isPresent()) {
+		// fetch restaurants by ZipCode with at least one user submitted Review
+		Optional<List<Restaurant>> fetchRestaurantsByZipCode = restaurantRepository
+				.findByRestaurantAddressZipCodeOrderByRestaurantAddressNameDesc("78180");
+
+		if (!fetchRestaurantsByZipCode.isPresent()) {
 			System.out.println("No restaurants exists in the given zipCode search");
-		}else {
-			Restaurant restaurant = fetchRestaurantsByZipCode.get();
+		} else {
+			List<Restaurant> restaurant = fetchRestaurantsByZipCode.get();
+			System.out.println(restaurant);
+
+			// now verify if restaurant has any reviews
+			restaurant.forEach(subRestaurant -> {
+				if (subRestaurant.getDiningReview().size() > 0) {
+					System.out.println(subRestaurant);
+				}
+			});
+			System.out.println(
+					restaurant.size() + " Restaurants exists in the given ZipCode but no reviews are available");
+		}
+	}
+
+	// on diningReviews
+	@Test
+	public void submitDiningReview() {
+		// a registeredUser should be able to give a diningReview
+		// select restaurant to give review either by (ID/ADDRESS/ZipCode)
+
+		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(3L);
+
+		if (!fetchRestaurantById.isPresent()) {
+			System.out.println("Restaurant with the givenId does not exist");
+		} else {
+			Restaurant restaurant = fetchRestaurantById.get();
+
+			DiningReview diningReview = new DiningReview();
+			diningReview.setReviewerName("Balber");
+			diningReview.setRestaurant(restaurant);
+			diningReview.setPeanutAllergyScore(ReviewScore.FOUR);
+			diningReview.setEggAllergyScore(ReviewScore.THREE);
+			diningReview.setDairyAllergyScore(ReviewScore.FIVE);
+			diningReview.setStatus(Status.REJECTED);
+			diningReview.setCommentary("Restaurant pays attention to allergic food  for its users");
+
+			diningReviewRepository.save(diningReview);
+			System.out.println("Dining review by user saved successfully");
+
+		}
+	}
+
+	@Test
+	public void getAllPendingDiningReviews() {
+		// An admin should be able to get list of all dining reviews pending approval
+
+		List<DiningReview> diningReviewsPendingApprovalList = diningReviewRepository
+				.getAllByStatusEquals(Status.PENDING);
+		diningReviewsPendingApprovalList.forEach(review -> {
+			System.out.println(review);
+		});
+	}
+
+	@Test
+	public void approveAndRejectAGivenDiningReview() {
+		// An admin should be able to approve/reject a given dining Review
+		// Firstly, we retrieve all diningReviews pending approval
+		// then we either approve/reject and persist it back to the DB_table through its
+		// entity
+
+		List<DiningReview> diningReviewsPendingApprovalList = diningReviewRepository
+				.getAllByStatusEquals(Status.PENDING);
+
+		// if diningReviewsPending approval list is not empty, we will decide to set the
+		// first review in List as Approved
+		// for test purposes
+		if (diningReviewsPendingApprovalList.size() > 0) {
+			DiningReview diningDiningReview = diningReviewsPendingApprovalList.get(0);
+			diningDiningReview.setStatus(Status.ACCEPTED);
+			diningReviewRepository.save(diningDiningReview);
+			System.out.println("User dining Review approved successfully");
+		}
+	}
+
+	@Test
+	public void retrieveAllApprovedReviewsforAGivenRestaurant() {
+
+		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(3L);
+
+		if (!fetchRestaurantById.isPresent()) {
+			System.out.println("Given restaurant does not exist");
+		} else {
+			Restaurant restaurant = fetchRestaurantById.get();
+
+			List<DiningReview> allApprovedReviewsforGivenRestaurant = diningReviewRepository
+					.getAllByRestaurantAndStatusEquals(restaurant, Status.ACCEPTED);
 			
-			//now verify if restaurant has any reviews
-			if(restaurant.getDiningReview().size() > 0) {
-				System.out.println(restaurant);
-			}else {
-				System.out.println("Restaurants exists in the given ZipCode but no reviews are available");
-			}
+			allApprovedReviewsforGivenRestaurant.forEach(diningReview -> {
+				System.out.println(diningReview);
+			});
 		}
 	}
 

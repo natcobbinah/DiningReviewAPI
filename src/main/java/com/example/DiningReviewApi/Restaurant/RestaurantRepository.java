@@ -1,5 +1,6 @@
 package com.example.DiningReviewApi.Restaurant;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -10,5 +11,5 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
 	Optional<Restaurant> findByRestaurantAddress(RestaurantAddress restaurantAddress);
 	
-	Optional<Restaurant> findByRestaurantAddressZipCode(String zipCode);
+	Optional<List<Restaurant>> findByRestaurantAddressZipCodeOrderByRestaurantAddressNameDesc(String zipCode);
 }

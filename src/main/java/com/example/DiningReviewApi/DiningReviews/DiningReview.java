@@ -1,10 +1,9 @@
 package com.example.DiningReviewApi.DiningReviews;
 
-import java.util.Optional;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,12 +13,14 @@ import javax.persistence.Table;
 
 import com.example.DiningReviewApi.Restaurant.Restaurant;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "DINING_REVIEW")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class DiningReview {
 
@@ -28,7 +29,7 @@ public class DiningReview {
 	private Long diningReviewId;
 
 	@Column(name = "reviewer_name", unique = true)
-	private String name;
+	private String reviewerName;
 
 	@ManyToOne(optional=false) 
 	@JoinColumn(name = "restaurant_Id", nullable = false)
@@ -49,8 +50,18 @@ public class DiningReview {
 	@Column(name = "commentary")
 	private String commentary;
 	
-	@Enumerated()
+	//using attribute converter to autoApply enumRules
 	@Column(name = "review_status")
 	private Status status;
+	
+	//Implemented this custom toString() to see the error Thrown when @Data annotation is used
+	//this is because it causes  a recursive toString() call on restaurant and back to diningReviewEntity
+	//So uncommenting the toString() and getting [Restaurant] directly throws the stackOverFlowError,but getting
+	//a specific field from [Restaurant] entity works fine
+	
+	//public String toString() {
+	//	return "DiningReview = [reviewId" + diningReviewId + " : ReviewerName" +  reviewerName + " : RestaurantID" + restaurant.getRestaurant_Id() + " : PeanutAllergyScore" + peanutAllergyScore  +" "
+	//			+ " ]";
+	//}
 
 }
