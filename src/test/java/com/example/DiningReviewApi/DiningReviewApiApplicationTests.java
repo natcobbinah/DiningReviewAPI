@@ -203,21 +203,24 @@ class DiningReviewApiApplicationTests {
 	@Test
 	public void approveAndRejectAGivenDiningReview() {
 		// An admin should be able to approve/reject a given dining Review
-		// Firstly, we retrieve all diningReviews pending approval
-		// then we either approve/reject and persist it back to the DB_table through its
-		// entity
+		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(1L);
 
-		List<DiningReview> diningReviewsPendingApprovalList = diningReviewRepository
-				.getAllByStatusEquals(Status.PENDING);
+		if (!fetchRestaurantById.isPresent()) {
+			System.out.println("Given restaurant does not exist");
+		} else {
+			Restaurant restaurant = fetchRestaurantById.get();
 
-		// if diningReviewsPending approval list is not empty, we will decide to set the
-		// first review in List as Approved
-		// for test purposes
-		if (diningReviewsPendingApprovalList.size() > 0) {
-			DiningReview diningDiningReview = diningReviewsPendingApprovalList.get(0);
-			diningDiningReview.setStatus(Status.ACCEPTED);
-			diningReviewRepository.save(diningDiningReview);
-			System.out.println("User dining Review approved successfully");
+			Optional<DiningReview> reviewToApproveOrReject = diningReviewRepository.getByRestaurantAndStatusEquals(restaurant,
+					Status.PENDING);
+			
+			if(!reviewToApproveOrReject.isPresent()) {
+				System.out.println("Given restaurant has no pending reviews");
+			}else {
+				DiningReview diningReview = reviewToApproveOrReject.get();
+				diningReview.setStatus(Status.ACCEPTED);
+				diningReviewRepository.save(diningReview);
+				System.out.println("Dining Reviewing Status completed by admin");
+			}
 		}
 	}
 
@@ -233,7 +236,7 @@ class DiningReviewApiApplicationTests {
 
 			List<DiningReview> allApprovedReviewsforGivenRestaurant = diningReviewRepository
 					.getAllByRestaurantAndStatusEquals(restaurant, Status.ACCEPTED);
-			
+
 			allApprovedReviewsforGivenRestaurant.forEach(diningReview -> {
 				System.out.println(diningReview);
 			});

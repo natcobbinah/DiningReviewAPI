@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdminReview {
 
-	public Status acceptDiningReviewStatusByUser(DiningReview diningReview) {
+	public static DiningReview acceptOrRejectDiningReviewStatusByUser(DiningReview diningReview) {
 		 diningReview.setStatus(Status.ACCEPTED);
-		 return diningReview.getStatus();
+		 return diningReview;
 	}
 }

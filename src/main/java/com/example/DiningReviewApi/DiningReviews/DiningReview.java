@@ -28,7 +28,7 @@ public class DiningReview {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long diningReviewId;
 
-	@Column(name = "reviewer_name", unique = true)
+	@Column(name = "reviewer_name")
 	private String reviewerName;
 
 	@ManyToOne(optional=false) 
