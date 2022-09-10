@@ -1,9 +1,11 @@
 package com.example.DiningReviewApi.DataModels;
 
+import java.util.Optional;
+
 import lombok.Data;
 
 @Data
 public class UserSearchModel {
 	
-	private String name;
+	private Optional<String> name;
 }

@@ -3,10 +3,13 @@ package com.example.DiningReviewApi.User;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.DiningReviewApi.DataModels.UserDataModel;
 import com.example.DiningReviewApi.DataModels.UserSearchModel;
+import com.example.DiningReviewApi.Validators.NameValidator;
 
 @Service
 public class UserService {
@@ -14,7 +17,7 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 
-	public User createUser(UserDataModel userDataModel) throws Exception {
+	public User createUser(UserDataModel userDataModel){
 
 		UserAddress userAddress = new UserAddress();
 		userAddress.setCity(userDataModel.getUserAddressDataModel().getCity());
@@ -32,14 +35,15 @@ public class UserService {
 
 		if (OptionalfindIfUserExists.isPresent()) {
 			User alreadyExistingUser = OptionalfindIfUserExists.get();
-			throw new Exception("User with " + alreadyExistingUser.getDisplayName() + " Already Exists");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+					"User with " + alreadyExistingUser.getDisplayName() + " Already Exists");
 		} else {
 			userRepository.save(user);
 		}
 		return user;
 	}
 
-	public User updateUserProfile(UserDataModel userDataModel) throws Exception {
+	public User updateUserProfile(UserDataModel userDataModel) {
 		// As a registered User can update my profile but not displayName
 		Optional<User> fetchUserRecordToUpdate = userRepository.findByDisplayName(userDataModel.getDisplayName());
 
@@ -58,18 +62,26 @@ public class UserService {
 			userRepository.save(userRecordToUpdate);
 			return userRecordToUpdate;
 		} else {
-			throw new Exception("User with " + userDataModel.getDisplayName() + " does Not Exists");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"User with " + userDataModel.getDisplayName() + " does Not Exists");
 		}
 	}
-	
-	public User findUserByDisplayName(UserSearchModel userSearchModel) throws Exception {
-		Optional<User> retrieveUserProfile = userRepository.findByDisplayName(userSearchModel.getName());
+
+	public User findUserByDisplayName(UserSearchModel userSearchModel)  {
+
+		String validatedName = NameValidator.ValidateName(userSearchModel.getName().get());
+
+		if (validatedName.isBlank()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Invalid User parameters passed");
+		}
+
+		Optional<User> retrieveUserProfile = userRepository.findByDisplayName(validatedName);
 
 		if (retrieveUserProfile.isPresent()) {
 			User userInfo = retrieveUserProfile.get();
 			return userInfo;
 		} else {
-			throw new Exception("No User found with the given Username");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No User found with the given Username");
 		}
 	}
 

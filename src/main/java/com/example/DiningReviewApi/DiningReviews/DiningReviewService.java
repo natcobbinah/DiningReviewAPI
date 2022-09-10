@@ -55,11 +55,11 @@ public class DiningReviewService {
 		return diningReviewsPendingApprovalList;
 	}
 
-	public DiningReview approveAndRejectAGivenDiningReview(RestaurantSearchModel restaurantSearchModel)
-			throws Exception {
+	public DiningReview approveAndRejectAGivenDiningReview(RestaurantSearchModel restaurantSearchModel,
+			Status status) throws Exception {
 		// An admin should be able to approve/reject a given dining Review
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
-		
+
 		DiningReview diningReviewResponse = new DiningReview();
 
 		if (!fetchRestaurantById.isPresent()) {
@@ -76,7 +76,7 @@ public class DiningReviewService {
 				DiningReview diningReview = reviewToApproveOrReject.get();
 
 				// call AdminReview Operation on diningReview Status here
-				DiningReview finalizedDiningReview = AdminReview.acceptOrRejectDiningReviewStatusByUser(diningReview);
+				DiningReview finalizedDiningReview = AdminReview.acceptOrRejectDiningReviewStatusByUser(diningReview, status);
 				diningReviewResponse = finalizedDiningReview;
 				diningReviewRepository.save(finalizedDiningReview);
 			}
