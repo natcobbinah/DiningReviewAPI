@@ -7,7 +7,7 @@ public class UserDataModel {
 
 	private String displayName;
 	
-	private UserAddressDataModel userAddressDataModel;
+	private UserAddress userAddress;
 	
 	private boolean interestPeanutAllergies;
 	
