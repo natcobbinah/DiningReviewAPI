@@ -10,10 +10,16 @@ import lombok.Data;
 public class DiningReviewDataModel {
 
 	private String reviewerName;
+
 	private Restaurant restaurant;
+	
 	private ReviewScore peanutAllergyScore;
+	
 	private ReviewScore eggAllergyScore;
+	
 	private ReviewScore dairyAllergyScore;
+	
 	private String commentary;
+	
 	private Status status;
 }

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.DiningReviewApi.DataModels.RestaurantDataModel;
 import com.example.DiningReviewApi.DataModels.RestaurantSearchModel;
+import com.example.DiningReviewApi.ExceptionHandlers.AlreadyExistException;
+import com.example.DiningReviewApi.ExceptionHandlers.NotFoundException;
 
 @Service
 public class RestaurantService {
@@ -16,17 +18,17 @@ public class RestaurantService {
 	@Autowired
 	RestaurantRepository restaurantRepository;
 
-	public Restaurant createRestaurant(RestaurantDataModel restaurantDataModel) throws Exception {
+	public Restaurant createRestaurant(RestaurantDataModel restaurantDataModel) {
 		// submit new restaurant entry as user
-		// if restaurant with sameName and zipCode exists throw error
+		// if restaurant with sameName and zipCode exists throw AlreadyExistException
 
 		RestaurantAddress restaurantAddress = new RestaurantAddress();
-		restaurantAddress.setName(restaurantDataModel.getRestaurantAddressDataModel().getName());
-		restaurantAddress.setZipCode(restaurantDataModel.getRestaurantAddressDataModel().getZipCode());
+		restaurantAddress.setName(restaurantDataModel.getRestaurantAddress().getName());
+		restaurantAddress.setZipCode(restaurantDataModel.getRestaurantAddress().getZipCode());
 
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantAddress(restaurantAddress);
-		restaurant.setPeanutAllergyScore(restaurantDataModel.getPeanutAllergyScore());
+		restaurant.setPeanutAllergyScore(restaurantDataModel.getEggAllergyScore());
 		restaurant.setEggAllergyScore(restaurantDataModel.getEggAllergyScore());
 		restaurant.setDairyAllergyScore(restaurantDataModel.getDairyAllergyScore());
 		restaurant.setOverAllRestaurantScore(restaurantDataModel.getOverAllRestaurantScore());
@@ -35,49 +37,44 @@ public class RestaurantService {
 				.findByRestaurantAddress(restaurantAddress);
 
 		if (retrieveRestaurantIfAlreadyExists.isPresent()) {
-			throw new Exception("The given restaurant already exists. Cannot created restaurant Entry");
+			throw new AlreadyExistException("The given restaurant already exists. Cannot created restaurant Entry");
 		} else {
 			restaurantRepository.save(restaurant);
 			return restaurant;
 		}
 	}
 
-	public Restaurant fetchRestaurantDetailsById(RestaurantSearchModel restaurantSearchModel) throws Exception {
+	public Restaurant fetchRestaurantDetailsById(RestaurantSearchModel restaurantSearchModel) {
 		// fetch details of a restaurant given its uniqueId
 
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
 
 		if (!fetchRestaurantById.isPresent()) {
-			throw new Exception("Restaurant with the givenId does not exist");
+			throw new NotFoundException("Restaurant with the givenId does not exist");
 		} else {
 			Restaurant restaurant = fetchRestaurantById.get();
 			return restaurant;
 		}
 	}
 
-	public List<Restaurant> fetchRestaurantsByZipCodeWithReviews(RestaurantSearchModel restaurantSearchModel)
-			throws Exception {
-		// fetch restaurants by ZipCode with at least one user submitted Review
+	public List<Restaurant> fetchRestaurantsByZipCodeWithReviews(RestaurantSearchModel restaurantSearchModel) {
+		// fetch restaurants by ZipCode with at least one user submitted Review		
 		Optional<List<Restaurant>> fetchRestaurantsByZipCode = restaurantRepository
-				.findByRestaurantAddressZipCodeOrderByRestaurantAddressNameDesc(restaurantSearchModel.getZipCode());
+				.findByRestaurantAddressZipCodeOrderByRestaurantAddressNameDesc(restaurantSearchModel.getZipCode().get());
 
-		if (!fetchRestaurantsByZipCode.isPresent()) {
-			throw new Exception("No restaurants exists in the given zipCode search");
-		} else {
-			List<Restaurant> restaurant = fetchRestaurantsByZipCode.get();
+		List<Restaurant> restaurants = fetchRestaurantsByZipCode.get();
+		System.out.println(restaurants);
+		
+		List<Restaurant> restaurantsWithReviews = new LinkedList<>();
 
-			List<Restaurant> appendedRestaurantWithReviews = new LinkedList<>();
-
-			// now verify if restaurant has any reviews
-			restaurant.forEach(subRestaurant -> {
-				if (subRestaurant.getDiningReview().size() > 0) {
-					appendedRestaurantWithReviews.add(subRestaurant);
-				} else {
-					System.out.println(restaurant.size()
-							+ " Restaurants exists in the given ZipCode but no reviews are available");
-				}
-			});
-			return appendedRestaurantWithReviews;
-		}
+		// now verify if restaurant has any reviews
+		restaurants.forEach(restaurant -> {
+			if (restaurant.getDiningReview().size() > 0) {
+				System.out.println(restaurant);
+				restaurantsWithReviews.add(restaurant);
+			}
+		});
+		
+		return restaurantsWithReviews;
 	}
 }

@@ -144,21 +144,14 @@ class DiningReviewApiApplicationTests {
 		Optional<List<Restaurant>> fetchRestaurantsByZipCode = restaurantRepository
 				.findByRestaurantAddressZipCodeOrderByRestaurantAddressNameDesc("78180");
 
-		if (!fetchRestaurantsByZipCode.isPresent()) {
-			System.out.println("No restaurants exists in the given zipCode search");
-		} else {
-			List<Restaurant> restaurant = fetchRestaurantsByZipCode.get();
-			System.out.println(restaurant);
+		List<Restaurant> restaurants = fetchRestaurantsByZipCode.get();
 
-			// now verify if restaurant has any reviews
-			restaurant.forEach(subRestaurant -> {
-				if (subRestaurant.getDiningReview().size() > 0) {
-					System.out.println(subRestaurant);
-				}
-			});
-			System.out.println(
-					restaurant.size() + " Restaurants exists in the given ZipCode but no reviews are available");
-		}
+		// now verify if restaurant has any reviews
+		restaurants.forEach(restaurant -> {
+			if (restaurant.getDiningReview().size() > 0) {
+				System.out.println(restaurant);
+			}
+		});
 	}
 
 	// on diningReviews
@@ -210,12 +203,12 @@ class DiningReviewApiApplicationTests {
 		} else {
 			Restaurant restaurant = fetchRestaurantById.get();
 
-			Optional<DiningReview> reviewToApproveOrReject = diningReviewRepository.getByRestaurantAndStatusEquals(restaurant,
-					Status.PENDING);
-			
-			if(!reviewToApproveOrReject.isPresent()) {
+			Optional<DiningReview> reviewToApproveOrReject = diningReviewRepository
+					.getByRestaurantAndStatusEquals(restaurant, Status.PENDING);
+
+			if (!reviewToApproveOrReject.isPresent()) {
 				System.out.println("Given restaurant has no pending reviews");
-			}else {
+			} else {
 				DiningReview diningReview = reviewToApproveOrReject.get();
 				diningReview.setStatus(Status.ACCEPTED);
 				diningReviewRepository.save(diningReview);

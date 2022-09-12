@@ -17,25 +17,25 @@ import com.example.DiningReviewApi.DataModels.UserDataModel;
 import com.example.DiningReviewApi.DataModels.UserSearchModel;
 
 @RestController
-@RequestMapping(value = "/api/v1/user")
+@RequestMapping(value = "/api/v1")
 public class UserController {
 
 	@Autowired
 	UserService userService;
 
-	@PostMapping
+	@PostMapping("/user")
 	@ResponseStatus(code = HttpStatus.CREATED, reason = "User created Successfully")
 	public User createUser(@RequestBody UserDataModel userDataModel) {
 		return userService.createUser(userDataModel);
 	}
 
-	@PutMapping
+	@PutMapping("/user")
 	@ResponseStatus(code = HttpStatus.CREATED, reason = "User updated Successfully")
 	public User updateUserProfile(@RequestBody UserDataModel userDataModel) {
 		return userService.updateUserProfile(userDataModel);
 	}
 
-	@GetMapping
+	@GetMapping("/user")
 	public User findUserByDisplayName(@RequestParam("name") Optional<String> name) {
 		UserSearchModel userSearchModel = new UserSearchModel();
 		userSearchModel.setName(name);

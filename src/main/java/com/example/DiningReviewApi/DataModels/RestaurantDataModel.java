@@ -3,13 +3,12 @@ package com.example.DiningReviewApi.DataModels;
 import java.util.List;
 
 import com.example.DiningReviewApi.DiningReviews.DiningReview;
-
 import lombok.Data;
 
 @Data
 public class RestaurantDataModel {
 
-	private RestaurantAddressDataModel restaurantAddressDataModel;
+	private RestaurantAddress restaurantAddress;
 
 	private Integer peanutAllergyScore;
 	
