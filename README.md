@@ -15,81 +15,82 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
 
 ## restAPIEndpoints
 * USERS
-> findUserByName 
-  GET http://localhost:8080/api/v1/user?name="username_here"
-  
- 1. createUser
-    > POST http://localhost:8080/api/v1/user
-    Headers: Content-Type: application/json
-    body sample
-      {
-		    "displayName": "string",
-		    "userAddress": {
-			    "zipCode": "string",
-		      "city": "string"
-		  },
-		  "interestPeanutAllergies": boolean,
-		  "interestEggAllergies": boolean,
-		  "interestDiaryAllergies": boolean
-	    }
 
-  2. updateUser
-   > PUT http://localhost:8080/api/v1/user
-   Headers: Content-Type: application/json
-   body sample
-   {
-      "displayName": "string",
-      "userAddress": {
-        "zipCode": "string",
-          "city": "string"
-      },
-      "interestPeanutAllergies": boolean,
-      "interestEggAllergies": boolean,
-      "interestDiaryAllergies": boolean
-    }
+    1.  findUserByName 
+        > GET http://localhost:8080/api/v1/user?name="username_here"
+  
+    2.  createUser
+        > POST http://localhost:8080/api/v1/user
+        Headers: Content-Type: application/json
+        body sample
+          {
+            "displayName": "string",
+            "userAddress": {
+              "zipCode": "string",
+              "city": "string"
+          },
+          "interestPeanutAllergies": boolean,
+          "interestEggAllergies": boolean,
+          "interestDiaryAllergies": boolean
+          }
+
+    3. updateUser
+        > PUT http://localhost:8080/api/v1/user
+        Headers: Content-Type: application/json
+        body sample
+        {
+            "displayName": "string",
+            "userAddress": {
+              "zipCode": "string",
+                "city": "string"
+            },
+            "interestPeanutAllergies": boolean,
+            "interestEggAllergies": boolean,
+            "interestDiaryAllergies": boolean
+          }
 
   * RESTAURANT
-  1. fetchRestaurantByID
-  > GET http://localhost:8080/api/v1/restaurant/{restaurantId_here}
-    Headers: Content-Type: application/json
+      1. fetchRestaurantByID
+      > GET http://localhost:8080/api/v1/restaurant/{restaurantId_here}
+        Headers: Content-Type: application/json
 
-  2. fetchRestaurantWithReviewsByZipCode
-  > GET http://localhost:8080/api/v1/restaurant?zipCode=zipCode_here
-    Headers: Content-Type: application/json
+      2. fetchRestaurantWithReviewsByZipCode
+      > GET http://localhost:8080/api/v1/restaurant?zipCode=zipCode_here
+        Headers: Content-Type: application/json
 
-  3. createRestaurant
-  > POST http://localhost:8080/api/v1/restaurant
-   Headers: Content-Type: application/json
-   body sample
-    {
-      "restaurantAddress":{
-       "name" : "string",
-       "zipCode" : "string"
-       },
-      "peanutAllergyScore": "integer",
-      "eggAllergyScore" : "integer",
-      "dairyAllergyScore": "integer",
-    }
+      3. createRestaurant
+      > POST http://localhost:8080/api/v1/restaurant
+      Headers: Content-Type: application/json
+      body sample
+        {
+          "restaurantAddress":{
+          "name" : "string",
+          "zipCode" : "string"
+          },
+          "peanutAllergyScore": "integer",
+          "eggAllergyScore" : "integer",
+          "dairyAllergyScore": "integer",
+        }
 
   * REVIEWS
-  1. getAllPendingReviews
-    > GET http://localhost:8080/api/v1/diningReview/pending
+      1. getAllPendingReviews
+        > GET http://localhost:8080/api/v1/diningReview/pending
 
-  2. retrieveAllApprovedReviewsforAGivenRestaurant
-   > GET http://localhost:8080/api/v1/diningReview/all/approved?restaurantId={restaurantId_here}
+      2. retrieveAllApprovedReviewsforAGivenRestaurant
+      > GET http://localhost:8080/api/v1/diningReview/all/approved?restaurantId={restaurantId_here}
 
-  3. submitDiningReview
-   > POST http://localhost:8080/api/v1/diningReview
-   Headers: Content-Type: application/json
-   body sample
-    {
-      "reviewerName" : "string",
-      "restaurantId" : "integer",
-      "peanutAllergyScore" : "Enum(1..5/ONE..FIVE)",
-      "eggAllergyScore": "Enum(1..5/ONE..FIVE)",
-      "dairyAllergyScore" : "Enum(1..5/ONE..FIVE)",
-      "commentary" : "string"
-  }
+      3. submitDiningReview
+      > POST http://localhost:8080/api/v1/diningReview
+      Headers: Content-Type: application/json
+      body sample
+        {
+          "reviewerName" : "string",
+          "restaurantId" : "integer",
+          "peanutAllergyScore" : "Enum(1..5/ONE..FIVE)",
+          "eggAllergyScore": "Enum(1..5/ONE..FIVE)",
+          "dairyAllergyScore" : "Enum(1..5/ONE..FIVE)",
+          "commentary" : "string"
+      }
 
   
 
