@@ -1,6 +1,8 @@
 # DiningReviewAPI
 Implementation of diningReviewAPI codecademy portfolio project challenge on Spring/SpringBoot(still in progress...subject to modifications)
 
+- [NOTE] Inbuilt h2 database is used to persist to data to file, so no need for an external db
+
 ## Scenario
 Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
 - A user can create/update/ and fetchUser profile belonging to a given displayName
