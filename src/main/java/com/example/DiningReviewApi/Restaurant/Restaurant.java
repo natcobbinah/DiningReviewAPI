@@ -45,7 +45,6 @@ public class Restaurant {
 	@Column(name = "over_all_restaurant_score")
 	private Integer overAllRestaurantScore;
 
-	// @JsonBackReference
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "diningReviewId")
 	private List<DiningReview> diningReview;

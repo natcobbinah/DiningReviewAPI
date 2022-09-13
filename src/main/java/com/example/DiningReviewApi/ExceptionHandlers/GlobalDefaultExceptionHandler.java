@@ -3,6 +3,8 @@ package com.example.DiningReviewApi.ExceptionHandlers;
 
 import java.util.Date;
 
+import org.springframework.core.convert.ConversionFailedException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,5 +30,13 @@ public class GlobalDefaultExceptionHandler {
 		errorDTO.setTime(new Date().toString());
 		
 		return new ResponseEntity<ErrorDTO>(errorDTO, alex.getStatus());
+	}
+	
+	@ExceptionHandler(ConversionFailedException.class)
+	public ResponseEntity<ErrorDTO> handleConflict(RuntimeException ex){
+		ErrorDTO errorDTO = new ErrorDTO();
+		errorDTO.setMessage(ex.getMessage());
+		errorDTO.setTime(new Date().toString());
+		return new ResponseEntity<ErrorDTO>(errorDTO, HttpStatus.BAD_REQUEST);
 	}
 }

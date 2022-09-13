@@ -2,16 +2,14 @@ package com.example.DiningReviewApi.DataModels;
 
 import com.example.DiningReviewApi.DiningReviews.ReviewScore;
 import com.example.DiningReviewApi.DiningReviews.Status;
-import com.example.DiningReviewApi.Restaurant.Restaurant;
-
 import lombok.Data;
 
 @Data
 public class DiningReviewDataModel {
 
 	private String reviewerName;
-
-	private Restaurant restaurant;
+	
+	private Long restaurantId;
 	
 	private ReviewScore peanutAllergyScore;
 	
@@ -20,6 +18,4 @@ public class DiningReviewDataModel {
 	private ReviewScore dairyAllergyScore;
 	
 	private String commentary;
-	
-	private Status status;
 }

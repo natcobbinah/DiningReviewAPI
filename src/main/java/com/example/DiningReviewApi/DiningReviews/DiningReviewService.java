@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.example.DiningReviewApi.DataModels.AdminReview;
 import com.example.DiningReviewApi.DataModels.DiningReviewDataModel;
 import com.example.DiningReviewApi.DataModels.RestaurantSearchModel;
+import com.example.DiningReviewApi.ExceptionHandlers.NotFoundException;
 import com.example.DiningReviewApi.Restaurant.Restaurant;
 import com.example.DiningReviewApi.Restaurant.RestaurantRepository;
+import com.example.DiningReviewApi.Validators.NameValidator;
 
 @Service
 public class DiningReviewService {
@@ -21,17 +23,23 @@ public class DiningReviewService {
 	@Autowired
 	RestaurantRepository restaurantRepository;
 
-	public DiningReview submitDiningReview(DiningReviewDataModel diningReviewDataModel,
-			RestaurantSearchModel restaurantSearchModel) throws Exception {
+	public DiningReview submitDiningReview(DiningReviewDataModel diningReviewDataModel) {
 		// a registeredUser should be able to give a diningReview
 		// select restaurant to give review either by (ID/ADDRESS/ZipCode)
 
-		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
+		Optional<Restaurant> fetchRestaurantById = restaurantRepository
+				.findById(diningReviewDataModel.getRestaurantId());
 
 		if (!fetchRestaurantById.isPresent()) {
-			throw new Exception("Restaurant with the givenId does not exist");
+			throw new NotFoundException("Restaurant with the givenId does not exist");
 		} else {
 			Restaurant restaurant = fetchRestaurantById.get();
+
+			boolean validatedReviewerName = NameValidator.isNameValid(diningReviewDataModel.getReviewerName());
+
+			if (!validatedReviewerName) {
+				throw new NotFoundException("Invalid characters in reviewerName");
+			}
 
 			DiningReview diningReview = new DiningReview();
 			diningReview.setReviewerName(diningReviewDataModel.getReviewerName());
@@ -39,7 +47,7 @@ public class DiningReviewService {
 			diningReview.setPeanutAllergyScore(diningReviewDataModel.getPeanutAllergyScore());
 			diningReview.setEggAllergyScore(diningReviewDataModel.getEggAllergyScore());
 			diningReview.setDairyAllergyScore(diningReviewDataModel.getDairyAllergyScore());
-			diningReview.setStatus(diningReviewDataModel.getStatus());
+			diningReview.setStatus(Status.PENDING);
 			diningReview.setCommentary(diningReviewDataModel.getCommentary());
 
 			diningReviewRepository.save(diningReview);
@@ -55,15 +63,14 @@ public class DiningReviewService {
 		return diningReviewsPendingApprovalList;
 	}
 
-	public DiningReview approveAndRejectAGivenDiningReview(RestaurantSearchModel restaurantSearchModel,
-			Status status) throws Exception {
+	public DiningReview approveAndRejectAGivenDiningReview(RestaurantSearchModel restaurantSearchModel, Status status) {
 		// An admin should be able to approve/reject a given dining Review
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
 
 		DiningReview diningReviewResponse = new DiningReview();
 
 		if (!fetchRestaurantById.isPresent()) {
-			throw new Exception("Given restaurant does not exist");
+			throw new NotFoundException("Given restaurant does not exist");
 		} else {
 			Restaurant restaurant = fetchRestaurantById.get();
 
@@ -71,12 +78,13 @@ public class DiningReviewService {
 					.getByRestaurantAndStatusEquals(restaurant, Status.PENDING);
 
 			if (!reviewToApproveOrReject.isPresent()) {
-				System.out.println("Given restaurant has no pending reviews");
+				throw new NotFoundException("Given restaurant has no pending reviews");
 			} else {
 				DiningReview diningReview = reviewToApproveOrReject.get();
 
 				// call AdminReview Operation on diningReview Status here
-				DiningReview finalizedDiningReview = AdminReview.acceptOrRejectDiningReviewStatusByUser(diningReview, status);
+				DiningReview finalizedDiningReview = AdminReview.acceptOrRejectDiningReviewStatusByUser(diningReview,
+						status);
 				diningReviewResponse = finalizedDiningReview;
 				diningReviewRepository.save(finalizedDiningReview);
 			}
@@ -84,12 +92,12 @@ public class DiningReviewService {
 		return diningReviewResponse;
 	}
 
-	public List<DiningReview> retrieveAllApprovedReviewsforAGivenRestaurant(RestaurantSearchModel restaurantSearchModel)
-			throws Exception {
+	public List<DiningReview> retrieveAllApprovedReviewsforAGivenRestaurant(
+			RestaurantSearchModel restaurantSearchModel) {
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
 
 		if (!fetchRestaurantById.isPresent()) {
-			throw new Exception("Given restaurant does not exist");
+			throw new NotFoundException("Given restaurant does not exist");
 		} else {
 			Restaurant restaurant = fetchRestaurantById.get();
 

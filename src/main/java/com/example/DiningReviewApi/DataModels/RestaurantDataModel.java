@@ -1,8 +1,5 @@
 package com.example.DiningReviewApi.DataModels;
 
-import java.util.List;
-
-import com.example.DiningReviewApi.DiningReviews.DiningReview;
 import lombok.Data;
 
 @Data
@@ -18,5 +15,4 @@ public class RestaurantDataModel {
 
 	private Integer overAllRestaurantScore;
 
-	private List<DiningReview> diningReview;
 }

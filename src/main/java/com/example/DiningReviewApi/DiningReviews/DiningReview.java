@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import com.example.DiningReviewApi.Restaurant.Restaurant;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Getter;
@@ -32,10 +33,10 @@ public class DiningReview {
 	@Column(name = "reviewer_name")
 	private String reviewerName;
 
-	// @JsonManagedReference
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "restaurant_Id", nullable = false)
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "restaurant_Id")
+	@JsonIgnore
 	private Restaurant restaurant;
 
 	@Enumerated()

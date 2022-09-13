@@ -63,7 +63,6 @@ public class RestaurantService {
 				.findByRestaurantAddressZipCodeOrderByRestaurantAddressNameDesc(restaurantSearchModel.getZipCode().get());
 
 		List<Restaurant> restaurants = fetchRestaurantsByZipCode.get();
-		System.out.println(restaurants);
 		
 		List<Restaurant> restaurantsWithReviews = new LinkedList<>();
 
