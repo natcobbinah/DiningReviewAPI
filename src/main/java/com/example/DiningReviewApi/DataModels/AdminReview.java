@@ -1,5 +1,7 @@
 package com.example.DiningReviewApi.DataModels;
 
+import java.util.Optional;
+
 import com.example.DiningReviewApi.DiningReviews.DiningReview;
 import com.example.DiningReviewApi.DiningReviews.Status;
 

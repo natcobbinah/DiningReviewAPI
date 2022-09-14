@@ -67,29 +67,32 @@ public class DiningReviewService {
 		// An admin should be able to approve/reject a given dining Review
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
 
-		DiningReview diningReviewResponse = new DiningReview();
-
 		if (!fetchRestaurantById.isPresent()) {
 			throw new NotFoundException("Given restaurant does not exist");
-		} else {
-			Restaurant restaurant = fetchRestaurantById.get();
+		}
+		Restaurant restaurant = fetchRestaurantById.get();
 
-			Optional<DiningReview> reviewToApproveOrReject = diningReviewRepository
-					.getByRestaurantAndStatusEquals(restaurant, Status.PENDING);
+		List<DiningReview> reviewToApproveOrReject = diningReviewRepository.getByRestaurantAndStatusEquals(restaurant,
+				Status.PENDING);
 
-			if (!reviewToApproveOrReject.isPresent()) {
-				throw new NotFoundException("Given restaurant has no pending reviews");
+		Optional<DiningReview> diningReviewById = diningReviewRepository.findById(restaurantSearchModel.getReviewId());
+
+		if (!diningReviewById.isPresent()) {
+			throw new NotFoundException("Not diningReview has the assigned Id");
+		}
+		DiningReview foundreviewById = diningReviewById.get();
+
+		for (DiningReview diningReview : reviewToApproveOrReject) {
+			if (diningReview.getDiningReviewId() == foundreviewById.getDiningReviewId()) {
+				// call AdminReview Operation on diningReview Status here DiningReview
+				foundreviewById = AdminReview.acceptOrRejectDiningReviewStatusByUser(diningReview, status);
+				diningReviewRepository.save(foundreviewById);
+				break;
 			} else {
-				DiningReview diningReview = reviewToApproveOrReject.get();
-
-				// call AdminReview Operation on diningReview Status here
-				DiningReview finalizedDiningReview = AdminReview.acceptOrRejectDiningReviewStatusByUser(diningReview,
-						status);
-				diningReviewResponse = finalizedDiningReview;
-				diningReviewRepository.save(finalizedDiningReview);
+				throw new NotFoundException("No reviewId matched the provided diningReviewId");
 			}
 		}
-		return diningReviewResponse;
+		return foundreviewById;
 	}
 
 	public List<DiningReview> retrieveAllApprovedReviewsforAGivenRestaurant(

@@ -34,9 +34,10 @@ public class DiningReviewController {
 
 	@PatchMapping("/diningReviews/{restaurantId}")
 	public DiningReview approveAndRejectAGivenDiningReview(@RequestParam("status") Status status,
-			@PathVariable("restaurantId") Long restaurantId) {
+			@RequestParam("reviewId") Long reviewId, @PathVariable("restaurantId") Long restaurantId) {
 		RestaurantSearchModel restaurantSearchModel = new RestaurantSearchModel();
 		restaurantSearchModel.setId(restaurantId);
+		restaurantSearchModel.setReviewId(reviewId);
 		return diningReviewService.approveAndRejectAGivenDiningReview(restaurantSearchModel, status);
 	}
 

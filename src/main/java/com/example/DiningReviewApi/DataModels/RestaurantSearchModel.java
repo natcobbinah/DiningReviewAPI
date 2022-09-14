@@ -9,6 +9,8 @@ public class RestaurantSearchModel {
 	
 	private Long id;
 	
+	private Long reviewId;
+	
 	private Optional<String> zipCode;
 
 }

@@ -66,11 +66,9 @@ public class DiningReview {
 	// stackOverFlowError,but getting
 	// a specific field from [Restaurant] entity works fine
 
-	// public String toString() {
-	// return "DiningReview = [reviewId" + diningReviewId + " : ReviewerName" +
-	// reviewerName + " : RestaurantID" + restaurant.getRestaurant_Id() + " :
-	// PeanutAllergyScore" + peanutAllergyScore +" "
-	// + " ]";
-	// }
+	public String toString() {
+		return "DiningReview = [reviewId" + diningReviewId + " : ReviewerName" + reviewerName + " : RestaurantID"
+				+ restaurant.getRestaurant_Id() + " :" + " ]";
+	}
 
 }

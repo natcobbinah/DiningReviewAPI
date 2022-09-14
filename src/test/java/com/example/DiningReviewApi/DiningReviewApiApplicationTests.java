@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.DiningReviewApi.DataModels.AdminReview;
 import com.example.DiningReviewApi.DiningReviews.DiningReview;
 import com.example.DiningReviewApi.DiningReviews.DiningReviewRepository;
 import com.example.DiningReviewApi.DiningReviews.ReviewScore;
@@ -196,24 +197,49 @@ class DiningReviewApiApplicationTests {
 	@Test
 	public void approveAndRejectAGivenDiningReview() {
 		// An admin should be able to approve/reject a given dining Review
-		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(1L);
+		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(3L);
 
 		if (!fetchRestaurantById.isPresent()) {
 			System.out.println("Given restaurant does not exist");
-		} else {
-			Restaurant restaurant = fetchRestaurantById.get();
+		}
 
-			Optional<DiningReview> reviewToApproveOrReject = diningReviewRepository
-					.getByRestaurantAndStatusEquals(restaurant, Status.PENDING);
+		Restaurant restaurant = fetchRestaurantById.get();
 
-			if (!reviewToApproveOrReject.isPresent()) {
-				System.out.println("Given restaurant has no pending reviews");
+		List<DiningReview> reviewToApproveOrReject = diningReviewRepository.getByRestaurantAndStatusEquals(restaurant,
+				Status.PENDING);
+
+		Optional<DiningReview> diningReviewById = diningReviewRepository.findById(7L);
+
+		if (!diningReviewById.isPresent()) {
+			System.out.println("Not diningReview has the assigned Id");
+		}
+		DiningReview foundreviewById = diningReviewById.get();
+
+		for (DiningReview diningReview : reviewToApproveOrReject) {
+			System.out.println("diningReview =  [ " + diningReview);
+			System.out.println("foundreviewById =  [ " + foundreviewById);
+
+			if (diningReview.getDiningReviewId() == foundreviewById.getDiningReviewId()) {
+				// call AdminReview Operation on diningReview Status here DiningReview
+				foundreviewById = AdminReview.acceptOrRejectDiningReviewStatusByUser(diningReview, Status.ACCEPTED);
+				diningReviewRepository.save(foundreviewById);
+				System.out.println("Status updated successfully");
+				break;
 			} else {
-				DiningReview diningReview = reviewToApproveOrReject.get();
-				diningReview.setStatus(Status.ACCEPTED);
-				diningReviewRepository.save(diningReview);
-				System.out.println("Dining Reviewing Status completed by admin");
+				System.out.println("No reviewId matched the provided diningReviewId");
 			}
+		}
+	}
+
+	@Test
+	public void findByDiningReviewId() {
+		Optional<DiningReview> diningReview = diningReviewRepository.findById(7L);
+
+		if (!diningReview.isPresent()) {
+			System.out.println("No diningReview found");
+		} else {
+			DiningReview reviewFound = diningReview.get();
+			System.out.println(reviewFound);
 		}
 	}
 
