@@ -14,3 +14,6 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
 - Fetch details of a restaurant given its uniqueId
 - Fetch restaurants that match a given zipCode and has at least one-submitted score for a given allergy sorted in
   descending order
+- A restaurant reviewScores for individual foodAllergies and overAll Scores get updated on userReview entries
+ computing the average across all submitted scores for that category ** and ** overAll restaurant Score, by computing
+ the average across all submitted scores across all categories
