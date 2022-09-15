@@ -2,6 +2,8 @@ package com.example.DiningReviewApi.User;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import com.example.DiningReviewApi.ExceptionHandlers.AlreadyExistException;
 import com.example.DiningReviewApi.ExceptionHandlers.NotFoundException;
 import com.example.DiningReviewApi.Validators.NameValidator;
 
+@Transactional
 @Service
 public class UserService {
 

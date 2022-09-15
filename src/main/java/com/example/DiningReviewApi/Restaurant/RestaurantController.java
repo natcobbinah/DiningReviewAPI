@@ -27,6 +27,11 @@ public class RestaurantController {
 	public Restaurant createRestaurant(@RequestBody RestaurantDataModel restaurantDataModel) {
 		return restaurantService.createRestaurant(restaurantDataModel);
 	}
+	
+	@GetMapping("/restaurant")
+	public Iterable<Restaurant> fetchAllRestaurants(){
+		return restaurantService.fetchAllRestaurants();
+	}
 
 	@GetMapping("/restaurant/{id}")
 	public Restaurant fetchRestaurantDetailsById(@PathVariable("id") Long id) {
@@ -35,7 +40,7 @@ public class RestaurantController {
 		return restaurantService.fetchRestaurantDetailsById(restaurantSearchModel);
 	}
 
-	@GetMapping("/restaurant")
+	@GetMapping("/restaurant/reviews")
 	public List<Restaurant> fetchRestaurantsByZipCodeWithReviews(@RequestParam("zipCode") Optional<String> zipCode) {
 		RestaurantSearchModel restaurantSearchModel = new RestaurantSearchModel();
 		restaurantSearchModel.setZipCode(zipCode);

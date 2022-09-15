@@ -2,7 +2,6 @@ package com.example.DiningReviewApi.DiningReviews;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,15 +38,17 @@ public class DiningReview {
 	@JsonIgnore
 	private Restaurant restaurant;
 
-	@Enumerated()
+	// using attribute converter to autoApply enumRules 
+	//instead of @Enumerated() bcos, custom enumValues to used 
+	//for further computations
 	@Column(name = "peanut_review_score")
 	private ReviewScore peanutAllergyScore;
 
-	@Enumerated()
+	// using attribute converter to autoApply enumRules
 	@Column(name = "egg_review_score")
 	private ReviewScore eggAllergyScore;
 
-	@Enumerated()
+	// using attribute converter to autoApply enumRules
 	@Column(name = "diary_review_score")
 	private ReviewScore dairyAllergyScore;
 

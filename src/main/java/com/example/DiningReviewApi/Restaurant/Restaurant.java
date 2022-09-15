@@ -34,16 +34,16 @@ public class Restaurant {
 	private RestaurantAddress restaurantAddress;
 
 	@Column(name = "peanut_allergy_score")
-	private Integer peanutAllergyScore;
+	private String peanutAllergyScore;
 
 	@Column(name = "egg_allergy_score")
-	private Integer eggAllergyScore;
+	private String eggAllergyScore;
 
 	@Column(name = "diary_allergy_score")
-	private Integer dairyAllergyScore;
+	private String dairyAllergyScore;
 
 	@Column(name = "over_all_restaurant_score")
-	private Integer overAllRestaurantScore;
+	private String overAllRestaurantScore;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "diningReviewId")

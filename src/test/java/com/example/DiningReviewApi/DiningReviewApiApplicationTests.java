@@ -102,6 +102,10 @@ class DiningReviewApiApplicationTests {
 	public void createRestaurant() {
 		// submit new restaurant entry as user
 		// if restaurant with sameName and zipCode exists throw error
+		
+		//When creating a new Restaurant we, set only the address, as the other fields
+		//will be set to null
+		//It will then be updated as user submit reviews on the restaurant
 
 		RestaurantAddress restaurantAddress = new RestaurantAddress();
 		restaurantAddress.setName("Mercure");
@@ -109,10 +113,10 @@ class DiningReviewApiApplicationTests {
 
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantAddress(restaurantAddress);
-		restaurant.setPeanutAllergyScore(0);
-		restaurant.setEggAllergyScore(0);
-		restaurant.setDairyAllergyScore(0);
-		restaurant.setOverAllRestaurantScore(0);
+//		restaurant.setPeanutAllergyScore(0);
+//		restaurant.setEggAllergyScore(0);
+//		restaurant.setDairyAllergyScore(0);
+//		restaurant.setOverAllRestaurantScore(0);
 
 		Optional<Restaurant> retrieveRestaurantIfAlreadyExists = restaurantRepository
 				.findByRestaurantAddress(restaurantAddress);
@@ -137,6 +141,14 @@ class DiningReviewApiApplicationTests {
 			Restaurant restaurant = fetchRestaurantById.get();
 			System.out.println(restaurant);
 		}
+	}
+	
+	@Test
+	public void fetchAllRestaurants() {
+		Iterable<Restaurant> allRestaurants = restaurantRepository.findAll();
+		allRestaurants.forEach(restaurant -> {
+			System.out.println(restaurant);
+		});
 	}
 
 	@Test
@@ -260,6 +272,25 @@ class DiningReviewApiApplicationTests {
 				System.out.println(diningReview);
 			});
 		}
+	}
+	
+	//computation aspect
+	@Test
+	public void getAverageforDiaryAllergyReviewScores() {
+		Double averageScore = diningReviewRepository.averageForDiaryAllergy(3L);
+		System.out.println(averageScore);
+	}
+	
+	@Test
+	public void getAverageforEggAllergyReviewScores() {
+		Double averageScore = diningReviewRepository.averageForEggAllergy(3L);
+		System.out.println(averageScore);
+	}
+	
+	@Test
+	public void getAverageforPeanutAllergyReviewScores() {
+		Double averageScore = diningReviewRepository.averageForPeanutAllergy(3L);
+		System.out.println(averageScore);
 	}
 
 }

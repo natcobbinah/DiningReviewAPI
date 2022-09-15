@@ -3,6 +3,8 @@ package com.example.DiningReviewApi.DiningReviews;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import com.example.DiningReviewApi.Restaurant.Restaurant;
 import com.example.DiningReviewApi.Restaurant.RestaurantRepository;
 import com.example.DiningReviewApi.Validators.NameValidator;
 
+@Transactional
 @Service
 public class DiningReviewService {
 
@@ -49,8 +52,11 @@ public class DiningReviewService {
 			diningReview.setDairyAllergyScore(diningReviewDataModel.getDairyAllergyScore());
 			diningReview.setStatus(Status.PENDING);
 			diningReview.setCommentary(diningReviewDataModel.getCommentary());
-
 			diningReviewRepository.save(diningReview);
+
+			// update Restaurant Scores on user Reviews Submission
+			updateRestaurantAllergyScores_and_OverAllScores(restaurant);
+
 			return diningReview;
 		}
 	}
@@ -109,6 +115,24 @@ public class DiningReviewService {
 
 			return allApprovedReviewsforGivenRestaurant;
 		}
+	}
+
+	// update restaurant allergy and overAll scores when, users submit reviews
+	public void updateRestaurantAllergyScores_and_OverAllScores(Restaurant restaurant) {
+		Double diaryAllergyAverageScore = diningReviewRepository.averageForDiaryAllergy(restaurant.getRestaurant_Id());
+		Double eggAllergyAverageScore = diningReviewRepository.averageForEggAllergy(restaurant.getRestaurant_Id());
+		Double peanutAllergyaverageScore = diningReviewRepository
+				.averageForPeanutAllergy(restaurant.getRestaurant_Id());
+
+		Double overAllRestaurantScore = (diaryAllergyAverageScore + eggAllergyAverageScore + peanutAllergyaverageScore)
+				/ 3;
+
+		restaurant.setDairyAllergyScore(Double.toString(diaryAllergyAverageScore));
+		restaurant.setEggAllergyScore(Double.toString(eggAllergyAverageScore));
+		restaurant.setPeanutAllergyScore(Double.toString(peanutAllergyaverageScore));
+		restaurant.setOverAllRestaurantScore(Double.toString(overAllRestaurantScore));
+
+		restaurantRepository.save(restaurant);
 	}
 
 }

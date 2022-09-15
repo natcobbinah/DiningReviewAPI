@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import com.example.DiningReviewApi.DataModels.RestaurantSearchModel;
 import com.example.DiningReviewApi.ExceptionHandlers.AlreadyExistException;
 import com.example.DiningReviewApi.ExceptionHandlers.NotFoundException;
 
+@Transactional
 @Service
 public class RestaurantService {
 
@@ -28,10 +31,13 @@ public class RestaurantService {
 
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantAddress(restaurantAddress);
-		restaurant.setPeanutAllergyScore(restaurantDataModel.getEggAllergyScore());
-		restaurant.setEggAllergyScore(restaurantDataModel.getEggAllergyScore());
-		restaurant.setDairyAllergyScore(restaurantDataModel.getDairyAllergyScore());
-		restaurant.setOverAllRestaurantScore(restaurantDataModel.getOverAllRestaurantScore());
+		/*
+		 * restaurant.setPeanutAllergyScore(restaurantDataModel.getEggAllergyScore());
+		 * restaurant.setEggAllergyScore(restaurantDataModel.getEggAllergyScore());
+		 * restaurant.setDairyAllergyScore(restaurantDataModel.getDairyAllergyScore());
+		 * restaurant.setOverAllRestaurantScore(restaurantDataModel.
+		 * getOverAllRestaurantScore());
+		 */
 
 		Optional<Restaurant> retrieveRestaurantIfAlreadyExists = restaurantRepository
 				.findByRestaurantAddress(restaurantAddress);
@@ -42,6 +48,10 @@ public class RestaurantService {
 			restaurantRepository.save(restaurant);
 			return restaurant;
 		}
+	}
+	
+	public Iterable<Restaurant> fetchAllRestaurants(){
+		return restaurantRepository.findAll();
 	}
 
 	public Restaurant fetchRestaurantDetailsById(RestaurantSearchModel restaurantSearchModel) {

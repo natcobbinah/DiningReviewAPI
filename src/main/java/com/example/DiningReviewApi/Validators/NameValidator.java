@@ -1,5 +1,8 @@
 package com.example.DiningReviewApi.Validators;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class NameValidator {

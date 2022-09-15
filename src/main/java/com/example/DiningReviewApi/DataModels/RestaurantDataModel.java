@@ -7,12 +7,12 @@ public class RestaurantDataModel {
 
 	private RestaurantAddress restaurantAddress;
 
-	private Integer peanutAllergyScore;
+	private Double peanutAllergyScore;
 	
-	private Integer eggAllergyScore;
+	private Double eggAllergyScore;
 	
-	private Integer dairyAllergyScore;
+	private Double dairyAllergyScore;
 
-	private Integer overAllRestaurantScore;
+	private Double overAllRestaurantScore;
 
 }

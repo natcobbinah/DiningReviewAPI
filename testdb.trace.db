@@ -2244,3 +2244,15 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/nah/Doc
 	at org.h2.mvstore.FileStore.open(FileStore.java:128)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:452)
 	... 124 more
+2022-09-15 21:47:34 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "Truncate table DINING_REVIEW  [*]DINING_REVIEW"; SQL statement:
+Truncate table DINING_REVIEW  DINING_REVIEW [42000-214]
+2022-09-15 22:00:16 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM USER_RES DINING_REVIEW [*]RESTAURANT"; SQL statement:
+SELECT * FROM USER_RES DINING_REVIEW RESTAURANT [42000-214]
+2022-09-16 01:08:33 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'4.166666666666667' (RESTAURANT: ""DIARY_ALLERGY_SCORE"" INTEGER)"; SQL statement:
+update restaurant set diary_allergy_score=?, egg_allergy_score=?, over_all_restaurant_score=?, peanut_allergy_score=?, name=?, zip_code=? where restaurant_id=? [22018-214]
+2022-09-16 01:08:47 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'4.166666666666667' (RESTAURANT: ""DIARY_ALLERGY_SCORE"" INTEGER)"; SQL statement:
+update restaurant set diary_allergy_score=?, egg_allergy_score=?, over_all_restaurant_score=?, peanut_allergy_score=?, name=?, zip_code=? where restaurant_id=? [22018-214]
