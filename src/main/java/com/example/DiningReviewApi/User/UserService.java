@@ -7,8 +7,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.DiningReviewApi.DataModels.UserDataModel;
-import com.example.DiningReviewApi.DataModels.UserSearchModel;
+import com.example.DiningReviewApi.DataModels.UserDTO;
+import com.example.DiningReviewApi.DataModels.UserSearchDTO;
 import com.example.DiningReviewApi.ExceptionHandlers.AlreadyExistException;
 import com.example.DiningReviewApi.ExceptionHandlers.NotFoundException;
 import com.example.DiningReviewApi.Validators.NameValidator;
@@ -20,7 +20,7 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 
-	public User createUser(UserDataModel userDataModel) {
+	public User createUser(UserDTO userDataModel) {
 
 		boolean validatedName = NameValidator.isNameValid(userDataModel.getDisplayName());
 
@@ -51,7 +51,7 @@ public class UserService {
 		return user;
 	}
 
-	public User updateUserProfile(UserDataModel userDataModel) {
+	public User updateUserProfile(UserDTO userDataModel) {
 		// As a registered User can update my profile but not displayName
 		Optional<User> fetchUserRecordToUpdate = userRepository.findByDisplayName(userDataModel.getDisplayName());
 
@@ -74,7 +74,7 @@ public class UserService {
 		}
 	}
 
-	public User findUserByDisplayName(UserSearchModel userSearchModel) {
+	public User findUserByDisplayName(UserSearchDTO userSearchModel) {
 
 		String validatedName = NameValidator.ValidateName(userSearchModel.getName().get());
 

@@ -9,8 +9,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.DiningReviewApi.DataModels.RestaurantDataModel;
-import com.example.DiningReviewApi.DataModels.RestaurantSearchModel;
+import com.example.DiningReviewApi.DataModels.RestaurantDTO;
+import com.example.DiningReviewApi.DataModels.RestaurantSearchDTO;
 import com.example.DiningReviewApi.ExceptionHandlers.AlreadyExistException;
 import com.example.DiningReviewApi.ExceptionHandlers.NotFoundException;
 
@@ -21,7 +21,7 @@ public class RestaurantService {
 	@Autowired
 	RestaurantRepository restaurantRepository;
 
-	public Restaurant createRestaurant(RestaurantDataModel restaurantDataModel) {
+	public Restaurant createRestaurant(RestaurantDTO restaurantDataModel) {
 		// submit new restaurant entry as user
 		// if restaurant with sameName and zipCode exists throw AlreadyExistException
 
@@ -54,7 +54,7 @@ public class RestaurantService {
 		return restaurantRepository.findAll();
 	}
 
-	public Restaurant fetchRestaurantDetailsById(RestaurantSearchModel restaurantSearchModel) {
+	public Restaurant fetchRestaurantDetailsById(RestaurantSearchDTO restaurantSearchModel) {
 		// fetch details of a restaurant given its uniqueId
 
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
@@ -67,7 +67,7 @@ public class RestaurantService {
 		}
 	}
 
-	public List<Restaurant> fetchRestaurantsByZipCodeWithReviews(RestaurantSearchModel restaurantSearchModel) {
+	public List<Restaurant> fetchRestaurantsByZipCodeWithReviews(RestaurantSearchDTO restaurantSearchModel) {
 		// fetch restaurants by ZipCode with at least one user submitted Review		
 		Optional<List<Restaurant>> fetchRestaurantsByZipCode = restaurantRepository
 				.findByRestaurantAddressZipCodeOrderByRestaurantAddressNameDesc(restaurantSearchModel.getZipCode().get());

@@ -5,7 +5,7 @@ import java.util.Optional;
 import lombok.Data;
 
 @Data
-public class RestaurantSearchModel {
+public class RestaurantSearchDTO {
 	
 	private Long id;
 	

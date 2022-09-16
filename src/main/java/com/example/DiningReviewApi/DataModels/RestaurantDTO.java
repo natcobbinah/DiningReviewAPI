@@ -3,7 +3,7 @@ package com.example.DiningReviewApi.DataModels;
 import lombok.Data;
 
 @Data
-public class RestaurantDataModel {
+public class RestaurantDTO {
 
 	private RestaurantAddress restaurantAddress;
 

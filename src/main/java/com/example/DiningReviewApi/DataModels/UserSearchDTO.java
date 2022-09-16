@@ -5,7 +5,7 @@ import java.util.Optional;
 import lombok.Data;
 
 @Data
-public class UserSearchModel {
+public class UserSearchDTO {
 	
 	private Optional<String> name;
 }

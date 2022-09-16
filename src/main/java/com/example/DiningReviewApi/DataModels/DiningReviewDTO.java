@@ -5,7 +5,7 @@ import com.example.DiningReviewApi.DiningReviews.Status;
 import lombok.Data;
 
 @Data
-public class DiningReviewDataModel {
+public class DiningReviewDTO {
 
 	private String reviewerName;
 	

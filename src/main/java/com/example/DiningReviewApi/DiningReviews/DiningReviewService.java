@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.DiningReviewApi.DataModels.AdminReview;
-import com.example.DiningReviewApi.DataModels.DiningReviewDataModel;
-import com.example.DiningReviewApi.DataModels.RestaurantSearchModel;
+import com.example.DiningReviewApi.DataModels.DiningReviewDTO;
+import com.example.DiningReviewApi.DataModels.RestaurantSearchDTO;
 import com.example.DiningReviewApi.ExceptionHandlers.NotFoundException;
 import com.example.DiningReviewApi.Restaurant.Restaurant;
 import com.example.DiningReviewApi.Restaurant.RestaurantRepository;
@@ -26,7 +26,7 @@ public class DiningReviewService {
 	@Autowired
 	RestaurantRepository restaurantRepository;
 
-	public DiningReview submitDiningReview(DiningReviewDataModel diningReviewDataModel) {
+	public DiningReview submitDiningReview(DiningReviewDTO diningReviewDataModel) {
 		// a registeredUser should be able to give a diningReview
 		// select restaurant to give review either by (ID/ADDRESS/ZipCode)
 
@@ -69,7 +69,7 @@ public class DiningReviewService {
 		return diningReviewsPendingApprovalList;
 	}
 
-	public DiningReview approveAndRejectAGivenDiningReview(RestaurantSearchModel restaurantSearchModel, Status status) {
+	public DiningReview approveAndRejectAGivenDiningReview(RestaurantSearchDTO restaurantSearchModel, Status status) {
 		// An admin should be able to approve/reject a given dining Review
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
 
@@ -102,7 +102,7 @@ public class DiningReviewService {
 	}
 
 	public List<DiningReview> retrieveAllApprovedReviewsforAGivenRestaurant(
-			RestaurantSearchModel restaurantSearchModel) {
+			RestaurantSearchDTO restaurantSearchModel) {
 		Optional<Restaurant> fetchRestaurantById = restaurantRepository.findById(restaurantSearchModel.getId());
 
 		if (!fetchRestaurantById.isPresent()) {

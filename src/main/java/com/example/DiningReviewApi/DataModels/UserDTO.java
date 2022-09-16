@@ -3,7 +3,7 @@ package com.example.DiningReviewApi.DataModels;
 import lombok.Data;
 
 @Data
-public class UserDataModel {
+public class UserDTO {
 
 	private String displayName;
 	
