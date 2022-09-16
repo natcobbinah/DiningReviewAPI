@@ -1,5 +1,5 @@
 # DiningReviewAPI
-Implementation of diningReviewAPI codecademy portfolio project challenge on Spring/SpringBoot(still in progress...subject to modifications)
+Implementation of diningReviewAPI codecademy portfolio project challenge on Spring/SpringBoot
 
 - [NOTE] Inbuilt h2 database is used to persist to data to file, so no need for an external db
 
