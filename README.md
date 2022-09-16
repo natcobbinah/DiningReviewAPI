@@ -21,6 +21,10 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
  the average across all submitted scores across all categories
  
  ## Testing the apiEndpoints for the various functionalities
+ - [x] All restAPI endpoints have been documented using openAPI v3 specification, and can be accessed through the url,
+ when run locally:
+ - http://localhost:8080/api/v1/swagger-ui.html
+ 
  ```
  Can be tested using any suitable restAPI test tools (PostMan, ARC(Advanced Rest Client a chrome extension) or curl
 * USERS
