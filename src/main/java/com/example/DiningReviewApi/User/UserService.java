@@ -13,6 +13,8 @@ import com.example.DiningReviewApi.ExceptionHandlers.AlreadyExistException;
 import com.example.DiningReviewApi.ExceptionHandlers.NotFoundException;
 import com.example.DiningReviewApi.Validators.NameValidator;
 
+import org.apache.commons.lang3.StringUtils;
+
 @Transactional
 @Service
 public class UserService {
@@ -78,7 +80,7 @@ public class UserService {
 
 		String validatedName = NameValidator.ValidateName(userSearchModel.getName().get());
 
-		if (validatedName.isBlank()) {
+		if ( StringUtils.isBlank(validatedName)) {
 			throw new NotFoundException("Invalid User parameters passed");
 		}
 
