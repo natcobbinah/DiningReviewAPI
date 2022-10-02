@@ -23,13 +23,13 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
  ## Testing the apiEndpoints for the various functionalities
  - [x] All restAPI endpoints have been documented using openAPI v3 specification, and can be accessed through the url,
  when run locally:
- - http://localhost:8080/api/v1/swagger-ui.html
+ - http://localhost:8443/api/v1/swagger-ui.html
  
  ```
  Can be tested using any suitable restAPI test tools (PostMan, ARC(Advanced Rest Client a chrome extension) or curl
 * USERS
       1. Creating a User
-         > POST http://localhost:8080/api/v1/user
+         > POST http://localhost:8443/api/v1/user
          Headers: Content-Type: application/json
          body sample
           {
@@ -44,11 +44,11 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
             } 
        
      2. Find a user by userName
-       > GET http://localhost:8080/api/v1/user?name="username_goes_here"
+       > GET http://localhost:8443/api/v1/user?name="username_goes_here"
        Headers: Content-Type: application/json
        
      3. Update A User
-       >PUT http://localhost:8080/api/v1/user
+       >PUT http://localhost:8443/api/v1/user
         Headers: Content-Type: application/json
         body sample
          {
@@ -64,7 +64,7 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
     
 * RESTAURANT
       1. Creating a Restaurant
-         > POST http://localhost:8080/api/v1/restaurant
+         > POST http://localhost:8443/api/v1/restaurant
          Headers: Content-Type: application/json
          body sample
          {
@@ -75,20 +75,20 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
          }
       
       2. Fetch All Restaurants
-      > GET http://localhost:8080/api/v1/restaurant
+      > GET http://localhost:8443/api/v1/restaurant
         Headers: Content-Type: application/json
        
       3. Fetch Restaurant ByID
-      > GET http://localhost:8080/api/v1/restaurant/{restaurantId_here}
+      > GET http://localhost:8443/api/v1/restaurant/{restaurantId_here}
                 
                 
       4. fetch Restaurant With Reviews ByZipCode
-      > GET http://localhost:8080/api/v1/restaurant?zipCode={zipCode_here}
+      > GET http://localhost:8443/api/v1/restaurant?zipCode={zipCode_here}
         Headers: Content-Type: application/json
         
 * REVIEWS
      1. Submit a Review
-         > POST http://localhost:8080/api/v1/diningReview
+         > POST http://localhost:8443/api/v1/diningReview
          Headers: Content-Type: application/json
          body sample
          {
@@ -101,15 +101,15 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
          }
        
       2. Retrieve all pending dining reviews
-      > GET http://localhost:8080/api/v1/diningReview/pending
+      > GET http://localhost:8443/api/v1/diningReview/pending
         Headers: Content-Type: application/json
         
       3. Retrieve all approved reviews for a given restaurant
-      > GET http://localhost:8080/api/v1/diningReview/all/approved?restaurantId={restaurantID_here}
+      > GET http://localhost:8443/api/v1/diningReview/all/approved?restaurantId={restaurantID_here}
      
 * ADMIN
      1. Approve/Reject a given diningReview
-      > PATCH http://localhost:8080/api/v1/diningReviews/{restaurantID_here}?status={STATUS}&reviewId={reviewID}
+      > PATCH http://localhost:8443/api/v1/diningReviews/{restaurantID_here}?status={STATUS}&reviewId={reviewID}
          
        
        
