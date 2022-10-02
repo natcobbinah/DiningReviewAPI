@@ -22,7 +22,7 @@ Given a [User, Admin, Restaurant, diningReviews] create restEndpoints such that:
  
  ## Testing the apiEndpoints for the various functionalities
  - [x] All restAPI endpoints have been documented using openAPI v3 specification, and can be accessed through the url,
- when run locally:
+ when run locally
  - http://localhost:8443/api/v1/swagger-ui.html
  
  ```
